@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BookDBAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace Book_API.Services.Interfaces
 {
   public interface IBookService
   {
-    IActionResult Book(string name);
+    IActionResult Count(string name);
+    IActionResult InsertData(BookItem data);
   }
 }

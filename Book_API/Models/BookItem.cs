@@ -7,8 +7,13 @@ namespace BookDBAPI.Models
 {
   public class BookItem
   {
-    public long Id { get; set; }
-    public string Name { get; set; }
-    public bool IsComplete { get; set; }
+    public DateTime DateTime { get; set; }
+    public string Title { get; set; }
+    public string Author { get; set; }
+    public string Publisher { get; set; }
+    public string Class { get; set; }
+    public string PublishYear { get; set; }
+    public int PageCount { get; set; }
+    public byte RecommendFlg { get; set; }
   }
 }

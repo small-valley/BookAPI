@@ -6,6 +6,7 @@ namespace Book_EF.EntityModels
     public partial class Book
     {
         public int Autonumber { get; set; }
+        public DateTime? Date { get; set; }
         public string Title { get; set; }
         public int? AuthorCd { get; set; }
         public int? PublisherCd { get; set; }

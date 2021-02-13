@@ -20,8 +20,6 @@ namespace Book_EF.EntityModels
         public virtual DbSet<Book> Book { get; set; }
         public virtual DbSet<Class> Class { get; set; }
         public virtual DbSet<Publisher> Publisher { get; set; }
-        public virtual DbSet<Sample> Sample { get; set; }
-        public virtual DbSet<ViewBook> ViewBook { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -63,7 +61,11 @@ namespace Book_EF.EntityModels
                     .HasColumnName("autonumber")
                     .HasColumnType("int(11)");
 
-                entity.Property(e => e.AuthorCd)
+                entity.Property(e => e.Date)
+                   .HasColumnName("date")
+                   .HasColumnType("datetime");
+
+              entity.Property(e => e.AuthorCd)
                     .HasColumnName("author_cd")
                     .HasColumnType("int(11)");
 
@@ -129,45 +131,6 @@ namespace Book_EF.EntityModels
                 entity.Property(e => e.PublisherName)
                     .HasColumnName("publisher_name")
                     .HasMaxLength(30);
-            });
-
-            modelBuilder.Entity<Sample>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToTable("sample");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasColumnType("int(11)");
-
-                entity.Property(e => e.Name)
-                    .HasColumnName("name")
-                    .HasMaxLength(20);
-            });
-
-            modelBuilder.Entity<ViewBook>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("view_book");
-
-                entity.Property(e => e.おすすめ)
-                    .HasMaxLength(1)
-                    .IsFixedLength()
-                    .HasDefaultValueSql("'0'");
-
-                entity.Property(e => e.タイトル).HasMaxLength(500);
-
-                entity.Property(e => e.ページ数).HasColumnType("int(11)");
-
-                entity.Property(e => e.出版年).HasMaxLength(4);
-
-                entity.Property(e => e.出版社).HasMaxLength(30);
-
-                entity.Property(e => e.分類).HasMaxLength(30);
-
-                entity.Property(e => e.著者).HasMaxLength(30);
             });
 
             OnModelCreatingPartial(modelBuilder);
