@@ -10,6 +10,7 @@ namespace Book_API.Services.Interfaces
   public interface IBookService
   {
     IActionResult Count(string name);
+    IActionResult GetBookItems(BookItemSearchKey searchKey);
     IActionResult InsertData(BookItem data);
   }
 }

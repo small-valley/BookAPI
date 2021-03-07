@@ -32,6 +32,17 @@ namespace Book_API.Controllers
     }
 
     /// <summary>
+    /// 全件検索
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns>処理結果</returns>
+    [RequireHttps, HttpGet]
+    public IActionResult GetBookItems([FromQuery] BookItemSearchKey searchKey)
+    {
+      return _bookService.GetBookItems(searchKey);
+    }
+
+    /// <summary>
     /// 本データ登録
     /// </summary>
     /// <param name="data">登録対象データ</param>

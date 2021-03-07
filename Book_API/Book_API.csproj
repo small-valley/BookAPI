@@ -8,6 +8,7 @@
     <DocumentationFile>D:\VS2015\BookDBAPI\BookDBAPI\Book_API.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'BookDBAPI' " />
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.1">
       <PrivateAssets>all</PrivateAssets>

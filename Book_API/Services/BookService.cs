@@ -30,6 +30,17 @@ namespace Book_API.Services
     }
 
     /// <summary>
+    /// 検索
+    /// </summary>
+    /// <param name="searchKey">検索条件</param>
+    /// <returns>処理結果</returns>
+    public IActionResult GetBookItems(BookItemSearchKey searchKey)
+    {
+      var data = this._dbContext.Book.Where(x => x.RecommendFlg == searchKey.RecommendFlg.ToString());
+      return new OkObjectResult(data);
+    }
+
+    /// <summary>
     /// 本データの登録
     /// </summary>
     /// <param name="data">データ</param>

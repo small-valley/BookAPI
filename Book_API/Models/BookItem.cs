@@ -5,6 +5,18 @@ using System.Threading.Tasks;
 
 namespace BookDBAPI.Models
 {
+  public class BookItemSearchKey
+  {
+    public DateTime? From { get; set; }
+    public DateTime? To { get; set; }
+    public string Title { get; set; }
+    public string Author { get; set; }
+    public string Publisher { get; set; }
+    public string Class { get; set; }
+    public string PublishYear { get; set; }
+    public byte RecommendFlg { get; set; }
+  }
+
   public class BookItem
   {
     public DateTime DateTime { get; set; }
