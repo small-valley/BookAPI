@@ -25,6 +25,8 @@ namespace BookDBAPI
   public class Startup
   {
     private const string CONNECTION_STRING_KEY = "DefaultConnection";
+    private const string MY_ALLOW_SPECIFIC_ORIGINS = "EnableCORS";
+
     public Startup(IConfiguration configuration)
     {
       Configuration = configuration;
@@ -36,8 +38,21 @@ namespace BookDBAPI
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddMvc();
-      //services.AddControllers();
+      //services.AddMvc();
+      services.AddControllers();
+
+      services.AddCors(options =>
+      {
+          options.AddPolicy(MY_ALLOW_SPECIFIC_ORIGINS, builder =>
+          {
+              builder
+                  .WithOrigins("http://localhost:4200", "https://localhost:4200")
+                  .WithHeaders("content-type")
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+          });
+      });
+
       services.AddSwaggerGen(c =>
       {
         // Set the comments path for the Swagger JSON and UI.
@@ -63,6 +78,8 @@ namespace BookDBAPI
       {
         c.SwaggerEndpoint("../swagger/v1/swagger.json", "Book API V1");
       });
+
+      app.UseCors(MY_ALLOW_SPECIFIC_ORIGINS);
 
       app.UseHttpsRedirection();
 
