@@ -34,7 +34,7 @@ namespace Book_API.Controllers
     /// <summary>
     /// 全件検索
     /// </summary>
-    /// <param name="name"></param>
+    /// <param name="searchKey">検索条件</param>
     /// <returns>処理結果</returns>
     [RequireHttps, HttpGet]
     public IActionResult GetBookItems([FromQuery] BookItemSearchKey searchKey)
@@ -52,5 +52,13 @@ namespace Book_API.Controllers
     {
       return _bookService.InsertData(data);
     }
+
+  　/// <summary>
+    /// 本データ更新
+    /// </summary>
+    /// <param name="data">更新対象データ</param>
+    /// <returns>処理結果</returns>
+    [RequireHttps, HttpPut]
+    public IActionResult UpdateData([FromBody] BookItem data) => _bookService.UpdateData(data);
   }
 }

@@ -1,4 +1,5 @@
 ﻿using Book_API.Services.Interfaces;
+using Book_API.Extensions;
 using Book_EF.EntityModels;
 using BookDBAPI.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,29 @@ namespace Book_API.Services
     /// <returns>処理結果</returns>
     public IActionResult GetBookItems(BookItemSearchKey searchKey)
     {
-      var data = this._dbContext.Book.Where(x => x.RecommendFlg == searchKey.RecommendFlg.ToString());
+      var data = this._dbContext.Book.WhereIf(searchKey.From.HasValue, x => x.Date >= searchKey.From)
+          .WhereIf(searchKey.To.HasValue, x => x.Date <= searchKey.To)
+          .WhereIf(!string.IsNullOrEmpty(searchKey.Title), x => x.Title.Contains(searchKey.Title))
+          .WhereIf(!string.IsNullOrEmpty(searchKey.PublishYear), x => x.PublishYear == searchKey.PublishYear)
+          .WhereIf(searchKey.RecommendFlg != 0, x => x.RecommendFlg == searchKey.RecommendFlg.ToString())
+          .WhereIf(!string.IsNullOrEmpty(searchKey.Author), x => x.AuthorCd.Value.ToString().Contains(this._dbContext.Author.FirstOrDefault(a => a.AuthorName == searchKey.Author).AuthorCd.ToString()))
+          .WhereIf(!string.IsNullOrEmpty(searchKey.Publisher), x => x.PublisherCd.Value.ToString().Contains(this._dbContext.Publisher.FirstOrDefault(a => a.PublisherName == searchKey.Publisher).PublisherCd.ToString()))
+          .WhereIf(!string.IsNullOrEmpty(searchKey.Class), x => x.ClassCd.Value.ToString().Contains(this._dbContext.Class.FirstOrDefault(a => a.ClassName == searchKey.Class).ClassCd.ToString()));
+          // .Join(this._dbContext.Author
+          //     , header => header.AuthorCd
+          //     , author => author.AuthorCd
+          //     , (h, a) => new { Header = h, Author = a })
+          // .WhereIf(!string.IsNullOrEmpty(searchKey.Author), x => x.Author.AuthorName.Contains(searchKey.Author))
+          // .Join(this._dbContext.Publisher
+          //     , header => header.Header.PublisherCd
+          //     , pub => pub.PublisherCd
+          //     , (h, p) => new { h.Header, h.Author, Publisher = p })
+          // .WhereIf(!string.IsNullOrEmpty(searchKey.Publisher), x => x.Publisher.PublisherName.Contains(searchKey.Publisher)) 
+          // .Join(this._dbContext.Class
+          //     , header => header.Header.ClassCd
+          //     , cl => cl.ClassCd
+          //     , (h, c) => new { Header = h, h.Author, h.Publisher, Class = c})
+          // .WhereIf(!string.IsNullOrEmpty(searchKey.Class), x => x.Class.ClassName.Contains(searchKey.Class));
       return new OkObjectResult(data);
     }
 
@@ -178,6 +201,7 @@ namespace Book_API.Services
           PublisherCd = publisherCd,
           ClassCd = classCd,
           PublishYear = data.PublishYear,
+          PageCount = data.PageCount,
           RecommendFlg = data.RecommendFlg.ToString(),
           DeleteFlg = "0",
         };
@@ -185,6 +209,27 @@ namespace Book_API.Services
         this._dbContext.Book.Add(entity);
       }
       return autoNum;
+    }
+
+    /// <summary>
+    /// 本の更新
+    /// </summary>
+    /// <param name="data">データ</param>
+    public IActionResult UpdateData(BookItem data)
+    {
+      var target = this._dbContext.Book.FirstOrDefault(x => x.Autonumber == data.Autonumber);
+      target.Date = data.DateTime;
+      target.Title = data.Title;
+      target.AuthorCd = int.Parse(data.Author);
+      target.PublisherCd = int.Parse(data.Publisher);
+      target.ClassCd = int.Parse(data.Class);
+      target.PageCount = data.PageCount;
+      target.PublishYear = data.PublishYear;
+      target.RecommendFlg = data.RecommendFlg.ToString();
+      _dbContext.Update(target);
+      _dbContext.SaveChanges();
+
+      return new OkResult();
     }
   }
 }
