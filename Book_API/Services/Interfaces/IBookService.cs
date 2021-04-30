@@ -9,9 +9,10 @@ namespace Book_API.Services.Interfaces
 {
   public interface IBookService
   {
-    IActionResult Count(string name);
+    IActionResult Count();
     IActionResult GetBookItems(BookItemSearchKey searchKey);
     IActionResult InsertData(BookItem data);
     IActionResult UpdateData(BookItem data);
+    IActionResult DeleteData(int autoNumber);
   }
 }

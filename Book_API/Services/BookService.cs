@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace Book_API.Services
 {
@@ -22,9 +24,8 @@ namespace Book_API.Services
     /// <summary>
     /// 全件カウント
     /// </summary>
-    /// <param name="name"></param>
     /// <returns>処理結果</returns>
-    public IActionResult Count(string name)
+    public IActionResult Count()
     {
       var count = this._dbContext.Book.Count();
       return new OkObjectResult(count);
@@ -42,24 +43,9 @@ namespace Book_API.Services
           .WhereIf(!string.IsNullOrEmpty(searchKey.Title), x => x.Title.Contains(searchKey.Title))
           .WhereIf(!string.IsNullOrEmpty(searchKey.PublishYear), x => x.PublishYear == searchKey.PublishYear)
           .WhereIf(searchKey.RecommendFlg != 0, x => x.RecommendFlg == searchKey.RecommendFlg.ToString())
-          .WhereIf(!string.IsNullOrEmpty(searchKey.Author), x => x.AuthorCd.Value.ToString().Contains(this._dbContext.Author.FirstOrDefault(a => a.AuthorName == searchKey.Author).AuthorCd.ToString()))
-          .WhereIf(!string.IsNullOrEmpty(searchKey.Publisher), x => x.PublisherCd.Value.ToString().Contains(this._dbContext.Publisher.FirstOrDefault(a => a.PublisherName == searchKey.Publisher).PublisherCd.ToString()))
-          .WhereIf(!string.IsNullOrEmpty(searchKey.Class), x => x.ClassCd.Value.ToString().Contains(this._dbContext.Class.FirstOrDefault(a => a.ClassName == searchKey.Class).ClassCd.ToString()));
-          // .Join(this._dbContext.Author
-          //     , header => header.AuthorCd
-          //     , author => author.AuthorCd
-          //     , (h, a) => new { Header = h, Author = a })
-          // .WhereIf(!string.IsNullOrEmpty(searchKey.Author), x => x.Author.AuthorName.Contains(searchKey.Author))
-          // .Join(this._dbContext.Publisher
-          //     , header => header.Header.PublisherCd
-          //     , pub => pub.PublisherCd
-          //     , (h, p) => new { h.Header, h.Author, Publisher = p })
-          // .WhereIf(!string.IsNullOrEmpty(searchKey.Publisher), x => x.Publisher.PublisherName.Contains(searchKey.Publisher)) 
-          // .Join(this._dbContext.Class
-          //     , header => header.Header.ClassCd
-          //     , cl => cl.ClassCd
-          //     , (h, c) => new { Header = h, h.Author, h.Publisher, Class = c})
-          // .WhereIf(!string.IsNullOrEmpty(searchKey.Class), x => x.Class.ClassName.Contains(searchKey.Class));
+          .WhereIf(!string.IsNullOrEmpty(searchKey.Author), x => x.AuthorCd.Value == this._dbContext.Author.FirstOrDefault(a => a.AuthorName.Contains(searchKey.Author)).AuthorCd)
+          .WhereIf(!string.IsNullOrEmpty(searchKey.Publisher), x => x.PublisherCd.Value == this._dbContext.Publisher.FirstOrDefault(a => a.PublisherName.Contains(searchKey.Publisher)).PublisherCd)
+          .WhereIf(!string.IsNullOrEmpty(searchKey.Class), x => x.ClassCd.Value == this._dbContext.Class.FirstOrDefault(a => a.ClassName.Contains(searchKey.Class)).ClassCd);
       return new OkObjectResult(data);
     }
 
@@ -231,5 +217,18 @@ namespace Book_API.Services
 
       return new OkResult();
     }
-  }
+
+        /// <summary>
+        /// 本の削除
+        /// </summary>
+        /// <param name="autoNumber">削除対象データ</param>
+        public IActionResult DeleteData(int autoNumber)
+        {
+            var target = this._dbContext.Book.FirstOrDefault(x => x.Autonumber == autoNumber);
+            _dbContext.Remove(target);
+            _dbContext.SaveChanges();
+
+            return new OkResult();
+        }
+    }
 }

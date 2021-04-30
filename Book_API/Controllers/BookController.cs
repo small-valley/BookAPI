@@ -26,10 +26,7 @@ namespace Book_API.Controllers
     /// <param name="name"></param>
     /// <returns>処理結果</returns>
     [RequireHttps, HttpGet, Route("cnt")]
-    public IActionResult Count([FromQuery] string name)
-    {
-      return _bookService.Count(name);
-    }
+    public IActionResult Count() => _bookService.Count();
 
     /// <summary>
     /// 全件検索
@@ -37,10 +34,7 @@ namespace Book_API.Controllers
     /// <param name="searchKey">検索条件</param>
     /// <returns>処理結果</returns>
     [RequireHttps, HttpGet]
-    public IActionResult GetBookItems([FromQuery] BookItemSearchKey searchKey)
-    {
-      return _bookService.GetBookItems(searchKey);
-    }
+    public IActionResult GetBookItems([FromQuery] BookItemSearchKey searchKey) => _bookService.GetBookItems(searchKey);
 
     /// <summary>
     /// 本データ登録
@@ -48,17 +42,22 @@ namespace Book_API.Controllers
     /// <param name="data">登録対象データ</param>
     /// <returns>処理結果</returns>
     [RequireHttps, HttpPost]
-    public IActionResult InsertData([FromBody] BookItem data)
-    {
-      return _bookService.InsertData(data);
-    }
+    public IActionResult InsertData([FromBody] BookItem data) => _bookService.InsertData(data);
 
-  　/// <summary>
+ 　/// <summary>
     /// 本データ更新
     /// </summary>
     /// <param name="data">更新対象データ</param>
     /// <returns>処理結果</returns>
     [RequireHttps, HttpPut]
     public IActionResult UpdateData([FromBody] BookItem data) => _bookService.UpdateData(data);
+
+    /// <summary>
+    /// 本データ削除
+    /// </summary>
+    /// <param name="autoNumber">削除対象データ</param>
+    /// <returns>処理結果</returns>
+    [RequireHttps, HttpDelete]
+    public IActionResult DeleteData([FromQuery] int autoNumber) => _bookService.DeleteData(autoNumber);
   }
 }
