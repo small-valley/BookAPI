@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Book_EF.EntityModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,6 +31,14 @@ namespace BookDBAPI.Models
     public string Class { get; set; }
     public string PublishYear { get; set; }
     public int PageCount { get; set; }
-    public byte RecommendFlg { get; set; }
+    public string RecommendFlg { get; set; }
   }
+
+    public class BookJoin
+    { 
+        public Book Book { get; set; }
+        public Author Author { get; set; }
+        public Class Class { get; set; }
+        public Publisher Publisher { get; set; }
+    }
 }

@@ -21,11 +21,27 @@ namespace Book_API.Services
       _dbContext = dbContext;
     }
 
-    /// <summary>
-    /// 全件カウント
-    /// </summary>
-    /// <returns>処理結果</returns>
-    public IActionResult Count()
+        private IMapper Mapper
+        {
+            get
+            {
+                var config = new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<Book, BookItem>();
+                    cfg.CreateMap<Author, BookItem>();
+                    cfg.CreateMap<Publisher, BookItem>();
+                    cfg.CreateMap<Class, BookItem>();
+                    cfg.CreateMap<BookJoin, BookItem>();
+                });
+                return config.CreateMapper();
+            }
+        }
+
+        /// <summary>
+        /// 全件カウント
+        /// </summary>
+        /// <returns>処理結果</returns>
+        public IActionResult Count()
     {
       var count = this._dbContext.Book.Count();
       return new OkObjectResult(count);
@@ -38,23 +54,50 @@ namespace Book_API.Services
     /// <returns>処理結果</returns>
     public IActionResult GetBookItems(BookItemSearchKey searchKey)
     {
-      var data = this._dbContext.Book.WhereIf(searchKey.From.HasValue, x => x.Date >= searchKey.From)
-          .WhereIf(searchKey.To.HasValue, x => x.Date <= searchKey.To)
-          .WhereIf(!string.IsNullOrEmpty(searchKey.Title), x => x.Title.Contains(searchKey.Title))
-          .WhereIf(!string.IsNullOrEmpty(searchKey.PublishYear), x => x.PublishYear == searchKey.PublishYear)
-          .WhereIf(searchKey.RecommendFlg != 0, x => x.RecommendFlg == searchKey.RecommendFlg.ToString())
-          .WhereIf(!string.IsNullOrEmpty(searchKey.Author), x => x.AuthorCd.Value == this._dbContext.Author.FirstOrDefault(a => a.AuthorName.Contains(searchKey.Author)).AuthorCd)
-          .WhereIf(!string.IsNullOrEmpty(searchKey.Publisher), x => x.PublisherCd.Value == this._dbContext.Publisher.FirstOrDefault(a => a.PublisherName.Contains(searchKey.Publisher)).PublisherCd)
-          .WhereIf(!string.IsNullOrEmpty(searchKey.Class), x => x.ClassCd.Value == this._dbContext.Class.FirstOrDefault(a => a.ClassName.Contains(searchKey.Class)).ClassCd);
-      return new OkObjectResult(data);
+            var data = this._dbContext.Book.WhereIf(searchKey.From.HasValue, x => x.Date >= searchKey.From)
+                .WhereIf(searchKey.To.HasValue, x => x.Date <= searchKey.To)
+                .WhereIf(!string.IsNullOrEmpty(searchKey.Title), x => x.Title.Contains(searchKey.Title))
+                .WhereIf(!string.IsNullOrEmpty(searchKey.PublishYear), x => x.PublishYear == searchKey.PublishYear)
+                .WhereIf(searchKey.RecommendFlg != 0, x => x.RecommendFlg == searchKey.RecommendFlg.ToString())
+                .Join(this._dbContext.Author
+                    , b => b.AuthorCd
+                    , a => a.AuthorCd
+                    , (b, a) => new { Book = b, Author =a })
+                .WhereIf(!string.IsNullOrEmpty(searchKey.Author), x => x.Author.AuthorName.Contains(searchKey.Author))
+                .Join(this._dbContext.Publisher
+                    , b => b.Book.PublisherCd
+                    , p => p.PublisherCd
+                    , (b, p) => new { b.Book, b.Author, Publisher = p })
+                .WhereIf(!string.IsNullOrEmpty(searchKey.Publisher), x => x.Publisher.PublisherName.Contains(searchKey.Publisher))
+                .Join(this._dbContext.Class
+                    , b => b.Book.ClassCd
+                    , c => c.ClassCd
+                    , (b, c) => new { b.Book, b.Author, b.Publisher, Class = c })
+                .WhereIf(!string.IsNullOrEmpty(searchKey.Class), x => x.Class.ClassName.Contains(searchKey.Class))
+                //.ProjectTo<BookItem>(this.Mapper.ConfigurationProvider);
+            .Select(x => new BookItem
+             {
+                 Autonumber = x.Book.Autonumber,
+                 DateTime = x.Book.Date.Value,
+                 Title = x.Book.Title,
+                 AuthorCd = x.Book.AuthorCd.Value,
+                 Author = x.Author.AuthorName,
+                 PublisherCd = x.Book.PublisherCd.Value,
+                 Publisher = x.Publisher.PublisherName,
+                 ClassCd = x.Book.ClassCd.Value,
+                 Class = x.Class.ClassName,
+                 PublishYear = x.Book.PublishYear,
+                 PageCount = x.Book.PageCount.Value,
+                 RecommendFlg = x.Book.RecommendFlg,
+             });
+            return new OkObjectResult(data);
     }
-
-    /// <summary>
-    /// 本データの登録
-    /// </summary>
-    /// <param name="data">データ</param>
-    /// <returns>処理結果</returns>
-    public IActionResult InsertData(BookItem data)
+        /// <summary>
+        /// 本データの登録
+        /// </summary>
+        /// <param name="data">データ</param>
+        /// <returns>処理結果</returns>
+        public IActionResult InsertData(BookItem data)
     {
       var num = 0;
 
@@ -188,7 +231,7 @@ namespace Book_API.Services
           ClassCd = classCd,
           PublishYear = data.PublishYear,
           PageCount = data.PageCount,
-          RecommendFlg = data.RecommendFlg.ToString(),
+          RecommendFlg = data.RecommendFlg,
           DeleteFlg = "0",
         };
 
@@ -211,7 +254,7 @@ namespace Book_API.Services
       target.ClassCd = int.Parse(data.Class);
       target.PageCount = data.PageCount;
       target.PublishYear = data.PublishYear;
-      target.RecommendFlg = data.RecommendFlg.ToString();
+      target.RecommendFlg = data.RecommendFlg;
       _dbContext.Update(target);
       _dbContext.SaveChanges();
 

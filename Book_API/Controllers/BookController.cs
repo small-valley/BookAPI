@@ -23,7 +23,6 @@ namespace Book_API.Controllers
     /// <summary>
     /// 全件カウント
     /// </summary>
-    /// <param name="name"></param>
     /// <returns>処理結果</returns>
     [RequireHttps, HttpGet, Route("cnt")]
     public IActionResult Count() => _bookService.Count();

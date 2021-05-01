@@ -1,14 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>D:\VS2015\BookDBAPI\BookDBAPI\Book_API.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netcoreapp3.1\Book_API.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'BookDBAPI' " />
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.1">
       <PrivateAssets>all</PrivateAssets>
@@ -23,6 +27,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Book_EF\Book_EF.csproj" />
   </ItemGroup>
-
-
+  
 </Project>
