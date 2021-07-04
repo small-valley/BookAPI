@@ -63,6 +63,7 @@ namespace BookDBAPI
 
       services.AddDbContext<BookContext>(options => options.UseMySQL(Configuration.GetConnectionString(CONNECTION_STRING_KEY)));
       services.AddTransient<IBookService, BookService>();
+      services.AddTransient<IAuthorService, AuthorService>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

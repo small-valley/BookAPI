@@ -11,7 +11,7 @@ namespace Book_API.Services.Interfaces
   {
     IActionResult Count();
     IActionResult GetBookItems(BookItemSearchKey searchKey);
-    IActionResult InsertData(BookItem data);
+    IActionResult InsertData(List<BookItem> data);
     IActionResult UpdateData(BookItem data);
     IActionResult DeleteData(int autoNumber);
   }

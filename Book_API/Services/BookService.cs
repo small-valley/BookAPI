@@ -74,6 +74,7 @@ namespace Book_API.Services
                     , c => c.ClassCd
                     , (b, c) => new { b.Book, b.Author, b.Publisher, Class = c })
                 .WhereIf(!string.IsNullOrEmpty(searchKey.Class), x => x.Class.ClassName.Contains(searchKey.Class))
+                .OrderBy(x => x.Book.Date)
                 //.ProjectTo<BookItem>(this.Mapper.ConfigurationProvider);
             .Select(x => new BookItem
              {
@@ -92,26 +93,30 @@ namespace Book_API.Services
              });
             return new OkObjectResult(data);
     }
-        /// <summary>
-        /// 本データの登録
-        /// </summary>
-        /// <param name="data">データ</param>
-        /// <returns>処理結果</returns>
-        public IActionResult InsertData(BookItem data)
+
+    /// <summary>
+    /// 本データの登録
+    /// </summary>
+    /// <param name="data">データ</param>
+    /// <returns>処理結果</returns>
+    public IActionResult InsertData(List<BookItem> data)
     {
-      var num = 0;
+        var num = 0;
 
-      using (var tran = _dbContext.Database.BeginTransaction())
-      {
-        var authorCd = InsertAuthor(data);
-        var publisherCd = InsertPublisher(data);
-        var classCd = InsertClass(data);
-        num = InsertBook(data, authorCd, publisherCd, classCd);
-        this._dbContext.SaveChanges();
-        tran.Commit();
-      }
+        foreach (var rec in data)
+        {
+            using (var tran = _dbContext.Database.BeginTransaction())
+            {
+                var authorCd = InsertAuthor(rec);
+                var publisherCd = InsertPublisher(rec);
+                var classCd = InsertClass(rec);
+                num = InsertBook(rec, authorCd, publisherCd, classCd);
+                this._dbContext.SaveChanges();
+                tran.Commit();
+            }
+        }
 
-      return new OkObjectResult(num);
+        return new OkObjectResult(num);
     }
 
     /// <summary>
@@ -219,7 +224,7 @@ namespace Book_API.Services
 
       if (book == null)
       {
-        autoNum = this._dbContext.Book.Count() == 0 ? 1 : this._dbContext.Book.Count() + 1;
+        autoNum = this._dbContext.Book.Count() == 0 ? 1 : this._dbContext.Book.Max(x => x.Autonumber) + 1;
 
         var entity = new Book
         {
@@ -249,9 +254,9 @@ namespace Book_API.Services
       var target = this._dbContext.Book.FirstOrDefault(x => x.Autonumber == data.Autonumber);
       target.Date = data.DateTime;
       target.Title = data.Title;
-      target.AuthorCd = int.Parse(data.Author);
-      target.PublisherCd = int.Parse(data.Publisher);
-      target.ClassCd = int.Parse(data.Class);
+      target.AuthorCd = data.AuthorCd;
+      target.PublisherCd = data.PublisherCd;
+      target.ClassCd = data.ClassCd;
       target.PageCount = data.PageCount;
       target.PublishYear = data.PublishYear;
       target.RecommendFlg = data.RecommendFlg;
