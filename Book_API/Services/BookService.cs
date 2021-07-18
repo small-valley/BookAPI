@@ -131,7 +131,7 @@ namespace Book_API.Services
 
       if (author == null)
       {
-        cd = this._dbContext.Author.Count() + 1;
+        cd = this._dbContext.Author.Max(x => x.AuthorCd) + 1;
 
         var entity = new Author
         {
@@ -161,7 +161,7 @@ namespace Book_API.Services
 
       if (publisher == null)
       {
-        cd = this._dbContext.Publisher.Count() + 1;
+        cd = this._dbContext.Publisher.Max(x => x.PublisherCd) + 1;
 
         var entity = new Publisher
         {
@@ -191,7 +191,7 @@ namespace Book_API.Services
 
       if (classData == null)
       {
-        cd = this._dbContext.Class.Count() + 1;
+        cd = this._dbContext.Class.Max(x => x.ClassCd) + 1;
 
         var entity = new Class
         {
@@ -224,7 +224,7 @@ namespace Book_API.Services
 
       if (book == null)
       {
-        autoNum = this._dbContext.Book.Count() == 0 ? 1 : this._dbContext.Book.Max(x => x.Autonumber) + 1;
+        autoNum = this._dbContext.Book.Max(x => x.Autonumber) == 0 ? 1 : this._dbContext.Book.Max(x => x.Autonumber) + 1;
 
         var entity = new Book
         {
