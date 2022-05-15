@@ -3,16 +3,12 @@ using Book_API.Extensions;
 using Book_EF.EntityModels;
 using BookDBAPI.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 
 namespace Book_API.Services
 {
-  public class BookService : IBookService
+    public class BookService : IBookService
   {
     private readonly BookContext _dbContext;
 
@@ -20,22 +16,6 @@ namespace Book_API.Services
     {
       _dbContext = dbContext;
     }
-
-        private IMapper Mapper
-        {
-            get
-            {
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Book, BookItem>();
-                    cfg.CreateMap<Author, BookItem>();
-                    cfg.CreateMap<Publisher, BookItem>();
-                    cfg.CreateMap<Class, BookItem>();
-                    cfg.CreateMap<BookJoin, BookItem>();
-                });
-                return config.CreateMapper();
-            }
-        }
 
         /// <summary>
         /// 全件カウント
@@ -54,7 +34,8 @@ namespace Book_API.Services
     /// <returns>処理結果</returns>
     public IActionResult GetBookItems(BookItemSearchKey searchKey)
     {
-            var data = this._dbContext.Book.WhereIf(searchKey.From.HasValue, x => x.Date >= searchKey.From)
+            var data = this._dbContext.Book
+                .WhereIf(searchKey.From.HasValue, x => x.Date >= searchKey.From)
                 .WhereIf(searchKey.To.HasValue, x => x.Date <= searchKey.To)
                 .WhereIf(!string.IsNullOrEmpty(searchKey.Title), x => x.Title.Contains(searchKey.Title))
                 .WhereIf(!string.IsNullOrEmpty(searchKey.PublishYear), x => x.PublishYear == searchKey.PublishYear)
@@ -75,22 +56,23 @@ namespace Book_API.Services
                     , (b, c) => new { b.Book, b.Author, b.Publisher, Class = c })
                 .WhereIf(!string.IsNullOrEmpty(searchKey.Class), x => x.Class.ClassName.Contains(searchKey.Class))
                 .OrderBy(x => x.Book.Date)
-                //.ProjectTo<BookItem>(this.Mapper.ConfigurationProvider);
             .Select(x => new BookItem
              {
                  Autonumber = x.Book.Autonumber,
                  DateTime = x.Book.Date.Value,
-                 Title = x.Book.Title,
-                 AuthorCd = x.Book.AuthorCd.Value,
-                 Author = x.Author.AuthorName,
-                 PublisherCd = x.Book.PublisherCd.Value,
-                 Publisher = x.Publisher.PublisherName,
-                 ClassCd = x.Book.ClassCd.Value,
-                 Class = x.Class.ClassName,
-                 PublishYear = x.Book.PublishYear,
-                 PageCount = x.Book.PageCount.Value,
-                 RecommendFlg = x.Book.RecommendFlg,
-             });
+                 Title = x.Book.Title ?? string.Empty,
+                 AuthorCd = x.Book.AuthorCd,
+                 Author = x.Author.AuthorName ?? string.Empty,
+                 PublisherCd = x.Book.PublisherCd,
+                 Publisher = x.Publisher.PublisherName ?? string.Empty,
+                 ClassCd = x.Book.ClassCd,
+                 Class = x.Class.ClassName ?? string.Empty,
+                 PublishYear = x.Book.PublishYear ?? string.Empty,
+                 PageCount = x.Book.PageCount,
+                 RecommendFlg = x.Book.RecommendFlg ?? string.Empty,
+             })
+            .ToArray();
+
             return new OkObjectResult(data);
     }
 

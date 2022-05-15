@@ -23,14 +23,14 @@ namespace BookDBAPI.Models
     public int Autonumber { get; set; }
     public DateTime DateTime { get; set; }
     public string Title { get; set; }
-    public int AuthorCd {get ;set; }
+    public int? AuthorCd {get ;set; }
     public string Author { get; set; }
-    public int PublisherCd { get; set; }
+    public int? PublisherCd { get; set; }
     public string Publisher { get; set; }
-    public int ClassCd { get; set; }
+    public int? ClassCd { get; set; }
     public string Class { get; set; }
     public string PublishYear { get; set; }
-    public int PageCount { get; set; }
+    public int? PageCount { get; set; }
     public string RecommendFlg { get; set; }
   }
 
