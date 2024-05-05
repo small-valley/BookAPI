@@ -1,0 +1,38 @@
+services:
+    backend:
+        build:
+            context: .
+            dockerfile: .docker/Dockerfile
+        container_name: dotnet-backend
+        ports:
+            - "5001:5001"
+        volumes:
+            - .:/app
+        working_dir: /app
+        command: >
+            sh -c "
+                dotnet restore &&
+                dotnet tool install --global dotnet-ef &&
+                dotnet dev-certs https &&
+                dotnet dev-certs https --trust &&
+                dotnet watch run --urls https://0.0.0.0:5001 --project Book_API/Book_API.csproj
+            "
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Production
+            - CONNECTION_STRING=Server=mysql;Database=your_database_name;User=root;Password=your_password;
+        depends_on:
+            - mysql
+
+    mysql:
+        image: mysql:8.0
+        container_name: mysql-db
+        ports:
+            - "3306:3306"
+        environment:
+            - MYSQL_ROOT_PASSWORD=your_password
+            - MYSQL_DATABASE=your_database_name
+        volumes:
+            - mysql-data:/var/lib/mysql
+
+volumes:
+    mysql-data:
