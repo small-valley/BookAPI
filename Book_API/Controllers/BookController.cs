@@ -1,11 +1,8 @@
 ﻿using Book_API.Services.Interfaces;
-using Book_EF.EntityModels;
 using BookDBAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Book_API.Controllers
 {
@@ -54,9 +51,9 @@ namespace Book_API.Controllers
     /// <summary>
     /// 本データ削除
     /// </summary>
-    /// <param name="autoNumber">削除対象データ</param>
+    /// <param name="id">削除対象ID</param>
     /// <returns>処理結果</returns>
     [RequireHttps, HttpDelete]
-    public IActionResult DeleteData([FromQuery] int autoNumber) => _bookService.DeleteData(autoNumber);
+    public IActionResult DeleteData([FromQuery] Guid id) => _bookService.DeleteData(id);
   }
 }

@@ -1,37 +1,34 @@
 ﻿using Book_EF.EntityModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BookDBAPI.Models
 {
   public class BookItemSearchKey
   {
-    public DateTime? From { get; set; }
-    public DateTime? To { get; set; }
+    public DateOnly? From { get; set; }
+    public DateOnly? To { get; set; }
     public string Title { get; set; }
     public string Author { get; set; }
     public string Publisher { get; set; }
     public string Class { get; set; }
     public string PublishYear { get; set; }
-    public byte RecommendFlg { get; set; }
+    public bool? IsRecommend { get; set; }
   }
 
   public class BookItem
   {
-    public int Autonumber { get; set; }
-    public DateTime DateTime { get; set; }
+    public Guid Id { get; set; }
+    public DateOnly Date { get; set; }
     public string Title { get; set; }
-    public int? AuthorCd {get ;set; }
+    public Guid? AuthorId {get ;set; }
     public string Author { get; set; }
-    public int? PublisherCd { get; set; }
+    public Guid? PublisherId { get; set; }
     public string Publisher { get; set; }
-    public int? ClassCd { get; set; }
+    public Guid? ClassId { get; set; }
     public string Class { get; set; }
     public string PublishYear { get; set; }
     public int? PageCount { get; set; }
-    public string RecommendFlg { get; set; }
+    public bool IsRecommend { get; set; }
   }
 
     public class BookJoin

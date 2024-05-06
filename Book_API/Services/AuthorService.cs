@@ -25,11 +25,11 @@ namespace Book_API.Services
         {
             var data = this._dbContext.Author;
             var query = this._dbContext.Book
-  .GroupBy(x => x.AuthorCd)
+  .GroupBy(x => x.AuthorId)
   .Select(x => new { AuthorCd = x.Key, Count = x.Count() })
                 .Join(this._dbContext.Author
                     , b => b.AuthorCd
-                    , a => a.AuthorCd
+                    , a => a.Id
                     , (b, a) => new { a.AuthorName, b.Count })
                 .OrderByDescending(x => x.Count)
                 .ThenBy(x => x.AuthorName);
