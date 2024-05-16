@@ -1,4 +1,4 @@
-﻿using Book_EF.EntityModels;
+using Book_EF.EntityModels;
 using System;
 
 namespace BookDBAPI.Models
@@ -20,7 +20,7 @@ namespace BookDBAPI.Models
     public Guid Id { get; set; }
     public DateOnly Date { get; set; }
     public string Title { get; set; }
-    public Guid? AuthorId {get ;set; }
+    public Guid? AuthorId { get; set; }
     public string Author { get; set; }
     public Guid? PublisherId { get; set; }
     public string Publisher { get; set; }
@@ -31,11 +31,11 @@ namespace BookDBAPI.Models
     public bool IsRecommend { get; set; }
   }
 
-    public class BookJoin
-    { 
-        public Book Book { get; set; }
-        public Author Author { get; set; }
-        public Class Class { get; set; }
-        public Publisher Publisher { get; set; }
-    }
+  public class BookJoin
+  {
+    public Book Book { get; set; }
+    public Author Author { get; set; }
+    public Class Class { get; set; }
+    public Publisher Publisher { get; set; }
+  }
 }

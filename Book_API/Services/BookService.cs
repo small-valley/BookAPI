@@ -1,4 +1,4 @@
-﻿using Book_API.Services.Interfaces;
+using Book_API.Services.Interfaces;
 using Book_API.Extensions;
 using Book_EF.EntityModels;
 using BookDBAPI.Models;
@@ -9,7 +9,7 @@ using System;
 
 namespace Book_API.Services
 {
-    public class BookService : IBookService
+  public class BookService : IBookService
   {
     private readonly BookContext _dbContext;
 
@@ -18,11 +18,11 @@ namespace Book_API.Services
       _dbContext = dbContext;
     }
 
-        /// <summary>
-        /// 全件カウント
-        /// </summary>
-        /// <returns>処理結果</returns>
-        public IActionResult Count()
+    /// <summary>
+    /// 全件カウント
+    /// </summary>
+    /// <returns>処理結果</returns>
+    public IActionResult Count()
     {
       var count = this._dbContext.Book.Count();
       return new OkObjectResult(count);
@@ -35,45 +35,45 @@ namespace Book_API.Services
     /// <returns>処理結果</returns>
     public IActionResult GetBookItems(BookItemSearchKey searchKey)
     {
-            var data = this._dbContext.Book
-                .WhereIf(searchKey.From.HasValue, x => x.Date >= searchKey.From)
-                .WhereIf(searchKey.To.HasValue, x => x.Date <= searchKey.To)
-                .WhereIf(!string.IsNullOrEmpty(searchKey.Title), x => x.Title.Contains(searchKey.Title))
-                .WhereIf(!string.IsNullOrEmpty(searchKey.PublishYear), x => x.PublishYear == searchKey.PublishYear)
-                .WhereIf(searchKey.IsRecommend is not null, x => x.IsRecommend == searchKey.IsRecommend)
-                .Join(this._dbContext.Author
-                    , b => b.AuthorId
-                    , a => a.Id
-                    , (b, a) => new { Book = b, Author = a })
-                .WhereIf(!string.IsNullOrEmpty(searchKey.Author), x => x.Author.AuthorName.Contains(searchKey.Author))
-                .Join(this._dbContext.Publisher
-                    , b => b.Book.PublisherId
-                    , p => p.Id
-                    , (b, p) => new { b.Book, b.Author, Publisher = p })
-                .WhereIf(!string.IsNullOrEmpty(searchKey.Publisher), x => x.Publisher.PublisherName.Contains(searchKey.Publisher))
-                .Join(this._dbContext.Class
-                    , b => b.Book.ClassId
-                    , c => c.Id
-                    , (b, c) => new { b.Book, b.Author, b.Publisher, Class = c })
-                .WhereIf(!string.IsNullOrEmpty(searchKey.Class), x => x.Class.ClassName.Contains(searchKey.Class))
-                .OrderBy(x => x.Book.Date)
-            .Select(x => new BookItem
-             {
-                 Date = x.Book.Date.Value,
-                 Title = x.Book.Title ?? string.Empty,
-                 AuthorId = x.Book.AuthorId,
-                 Author = x.Author.AuthorName ?? string.Empty,
-                 PublisherId = x.Book.PublisherId,
-                 Publisher = x.Publisher.PublisherName ?? string.Empty,
-                 ClassId = x.Book.ClassId,
-                 Class = x.Class.ClassName ?? string.Empty,
-                 PublishYear = x.Book.PublishYear ?? string.Empty,
-                 PageCount = x.Book.PageCount,
-                 IsRecommend = x.Book.IsRecommend,
-             })
-            .ToArray();
+      var data = this._dbContext.Book
+          .WhereIf(searchKey.From.HasValue, x => x.Date >= searchKey.From)
+          .WhereIf(searchKey.To.HasValue, x => x.Date <= searchKey.To)
+          .WhereIf(!string.IsNullOrEmpty(searchKey.Title), x => x.Title.Contains(searchKey.Title))
+          .WhereIf(!string.IsNullOrEmpty(searchKey.PublishYear), x => x.PublishYear == searchKey.PublishYear)
+          .WhereIf(searchKey.IsRecommend is not null, x => x.IsRecommend == searchKey.IsRecommend)
+          .Join(this._dbContext.Author
+              , b => b.AuthorId
+              , a => a.Id
+              , (b, a) => new { Book = b, Author = a })
+          .WhereIf(!string.IsNullOrEmpty(searchKey.Author), x => x.Author.AuthorName.Contains(searchKey.Author))
+          .Join(this._dbContext.Publisher
+              , b => b.Book.PublisherId
+              , p => p.Id
+              , (b, p) => new { b.Book, b.Author, Publisher = p })
+          .WhereIf(!string.IsNullOrEmpty(searchKey.Publisher), x => x.Publisher.PublisherName.Contains(searchKey.Publisher))
+          .Join(this._dbContext.Class
+              , b => b.Book.ClassId
+              , c => c.Id
+              , (b, c) => new { b.Book, b.Author, b.Publisher, Class = c })
+          .WhereIf(!string.IsNullOrEmpty(searchKey.Class), x => x.Class.ClassName.Contains(searchKey.Class))
+          .OrderBy(x => x.Book.Date)
+          .Select(x => new BookItem
+              {
+                Date = x.Book.Date.Value,
+                Title = x.Book.Title ?? string.Empty,
+                AuthorId = x.Book.AuthorId,
+                Author = x.Author.AuthorName ?? string.Empty,
+                PublisherId = x.Book.PublisherId,
+                Publisher = x.Publisher.PublisherName ?? string.Empty,
+                ClassId = x.Book.ClassId,
+                Class = x.Class.ClassName ?? string.Empty,
+                PublishYear = x.Book.PublishYear ?? string.Empty,
+                PageCount = x.Book.PageCount,
+                IsRecommend = x.Book.IsRecommend,
+              })
+          .ToArray();
 
-            return new OkObjectResult(data);
+      return new OkObjectResult(data);
     }
 
     /// <summary>
@@ -83,20 +83,20 @@ namespace Book_API.Services
     /// <returns>処理結果</returns>
     public IActionResult InsertData(List<BookItem> data)
     {
-        foreach (var rec in data)
+      foreach (var rec in data)
+      {
+        using (var tran = _dbContext.Database.BeginTransaction())
         {
-            using (var tran = _dbContext.Database.BeginTransaction())
-            {
-                var authorId = InsertAuthor(rec);
-                var publisherId = InsertPublisher(rec);
-                var classId = InsertClass(rec);
-                _ = InsertBook(rec, authorId, publisherId, classId);
-                this._dbContext.SaveChanges();
-                tran.Commit();
-            }
+          var authorId = InsertAuthor(rec);
+          var publisherId = InsertPublisher(rec);
+          var classId = InsertClass(rec);
+          _ = InsertBook(rec, authorId, publisherId, classId);
+          this._dbContext.SaveChanges();
+          tran.Commit();
         }
+      }
 
-        return new OkResult();
+      return new OkResult();
     }
 
     /// <summary>
@@ -222,17 +222,17 @@ namespace Book_API.Services
       return new OkResult();
     }
 
-        /// <summary>
-        /// 本の削除
-        /// </summary>
-        /// <param name="id">削除対象ID</param>
-        public IActionResult DeleteData(Guid id)
-        {
-            var target = this._dbContext.Book.FirstOrDefault(x => x.Id == id);
-            _dbContext.Remove(target);
-            _dbContext.SaveChanges();
+    /// <summary>
+    /// 本の削除
+    /// </summary>
+    /// <param name="id">削除対象ID</param>
+    public IActionResult DeleteData(Guid id)
+    {
+      var target = this._dbContext.Book.FirstOrDefault(x => x.Id == id);
+      _dbContext.Remove(target);
+      _dbContext.SaveChanges();
 
-            return new OkResult();
-        }
+      return new OkResult();
     }
+  }
 }

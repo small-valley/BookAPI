@@ -1,4 +1,4 @@
-﻿using Book_API.Services.Interfaces;
+using Book_API.Services.Interfaces;
 using BookDBAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -40,7 +40,7 @@ namespace Book_API.Controllers
     [RequireHttps, HttpPost]
     public IActionResult InsertData([FromBody] List<BookItem> data) => _bookService.InsertData(data);
 
- 　/// <summary>
+    /// <summary>
     /// 本データ更新
     /// </summary>
     /// <param name="data">更新対象データ</param>
