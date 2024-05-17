@@ -1,5 +1,6 @@
-using Book_EF.EntityModels;
 using System;
+
+using Book_EF.EntityModels;
 
 namespace BookDBAPI.Models
 {

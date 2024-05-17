@@ -42,7 +42,7 @@ namespace Book_API.Services
       return (accessToken, refreshToken, true);
     }
 
-    
+
     private async Task<JsonDocument> ExchangeCodeForTokensAsync(string code)
     {
       using var httpClient = new HttpClient();
@@ -53,10 +53,10 @@ namespace Book_API.Services
 
       var content = new FormUrlEncodedContent(
       [
-          new KeyValuePair<string, string>("grant_type", "authorization_code"),
-          new KeyValuePair<string, string>("client_id", clientId),
-          new KeyValuePair<string, string>("code", code),
-          new KeyValuePair<string, string>("redirect_uri", redirectUri)
+        new KeyValuePair<string, string>("grant_type", "authorization_code"),
+        new KeyValuePair<string, string>("client_id", clientId),
+        new KeyValuePair<string, string>("code", code),
+        new KeyValuePair<string, string>("redirect_uri", redirectUri)
       ]);
 
       var authHeaderValue = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{clientId}:{clientSecret}"));

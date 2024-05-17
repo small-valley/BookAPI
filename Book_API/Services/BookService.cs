@@ -1,11 +1,15 @@
-using Book_API.Services.Interfaces;
-using Book_API.Extensions;
-using Book_EF.EntityModels;
-using BookDBAPI.Models;
-using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
+
+using Book_API.Extensions;
+using Book_API.Services.Interfaces;
+
+using Book_EF.EntityModels;
+
+using BookDBAPI.Models;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace Book_API.Services
 {
@@ -58,19 +62,19 @@ namespace Book_API.Services
           .WhereIf(!string.IsNullOrEmpty(searchKey.Class), x => x.Class.ClassName.Contains(searchKey.Class))
           .OrderBy(x => x.Book.Date)
           .Select(x => new BookItem
-              {
-                Date = x.Book.Date.Value,
-                Title = x.Book.Title ?? string.Empty,
-                AuthorId = x.Book.AuthorId,
-                Author = x.Author.AuthorName ?? string.Empty,
-                PublisherId = x.Book.PublisherId,
-                Publisher = x.Publisher.PublisherName ?? string.Empty,
-                ClassId = x.Book.ClassId,
-                Class = x.Class.ClassName ?? string.Empty,
-                PublishYear = x.Book.PublishYear ?? string.Empty,
-                PageCount = x.Book.PageCount,
-                IsRecommend = x.Book.IsRecommend,
-              })
+          {
+            Date = x.Book.Date.Value,
+            Title = x.Book.Title ?? string.Empty,
+            AuthorId = x.Book.AuthorId,
+            Author = x.Author.AuthorName ?? string.Empty,
+            PublisherId = x.Book.PublisherId,
+            Publisher = x.Publisher.PublisherName ?? string.Empty,
+            ClassId = x.Book.ClassId,
+            Class = x.Class.ClassName ?? string.Empty,
+            PublishYear = x.Book.PublishYear ?? string.Empty,
+            PageCount = x.Book.PageCount,
+            IsRecommend = x.Book.IsRecommend,
+          })
           .ToArray();
 
       return new OkObjectResult(data);
