@@ -1,13 +1,18 @@
-using Book_API.Services.Interfaces;
-using BookDBAPI.Models;
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 
+using Book_API.Services.Interfaces;
+
+using BookDBAPI.Models;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
 namespace Book_API.Controllers
 {
-  [Route("api/[controller]")]
   [ApiController]
+  [RequireHttps, Route("api/[controller]")]
+  [Authorize]
   public class BookController : ControllerBase
   {
     private readonly IBookService _bookService;
@@ -21,7 +26,7 @@ namespace Book_API.Controllers
     /// 全件カウント
     /// </summary>
     /// <returns>処理結果</returns>
-    [RequireHttps, HttpGet, Route("cnt")]
+    [HttpGet, Route("cnt")]
     public IActionResult Count() => _bookService.Count();
 
     /// <summary>
@@ -29,7 +34,7 @@ namespace Book_API.Controllers
     /// </summary>
     /// <param name="searchKey">検索条件</param>
     /// <returns>処理結果</returns>
-    [RequireHttps, HttpGet]
+    [HttpGet]
     public IActionResult GetBookItems([FromQuery] BookItemSearchKey searchKey) => _bookService.GetBookItems(searchKey);
 
     /// <summary>
@@ -37,7 +42,7 @@ namespace Book_API.Controllers
     /// </summary>
     /// <param name="data">登録対象データ</param>
     /// <returns>処理結果</returns>
-    [RequireHttps, HttpPost]
+    [HttpPost]
     public IActionResult InsertData([FromBody] List<BookItem> data) => _bookService.InsertData(data);
 
     /// <summary>
@@ -45,7 +50,7 @@ namespace Book_API.Controllers
     /// </summary>
     /// <param name="data">更新対象データ</param>
     /// <returns>処理結果</returns>
-    [RequireHttps, HttpPut]
+    [HttpPut]
     public IActionResult UpdateData([FromBody] BookItem data) => _bookService.UpdateData(data);
 
     /// <summary>
@@ -53,7 +58,7 @@ namespace Book_API.Controllers
     /// </summary>
     /// <param name="id">削除対象ID</param>
     /// <returns>処理結果</returns>
-    [RequireHttps, HttpDelete]
+    [HttpDelete]
     public IActionResult DeleteData([FromQuery] Guid id) => _bookService.DeleteData(id);
   }
 }

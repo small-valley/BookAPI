@@ -1,10 +1,13 @@
 using Book_API.Services.Interfaces;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Book_API.Controllers
 {
-  [Route("api/[controller]")]
   [ApiController]
+  [RequireHttps, Route("api/[controller]")]
+  [Authorize]
   public class AuthorController
   {
     private readonly IAuthorService _authorService;
@@ -18,15 +21,14 @@ namespace Book_API.Controllers
     /// 全件カウント
     /// </summary>
     /// <returns>処理結果</returns>
-    [RequireHttps, HttpGet, Route("cnt")]
+    [HttpGet, Route("cnt")]
     public IActionResult Count() => _authorService.Count();
 
     /// <summary>
     /// 全件検索
     /// </summary>
     /// <returns>処理結果</returns>
-    [RequireHttps, HttpGet]
+    [HttpGet]
     public IActionResult GetAuthorItems() => _authorService.GetAuthorItems();
-
   }
 }
