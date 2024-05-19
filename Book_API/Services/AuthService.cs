@@ -21,6 +21,18 @@ namespace Book_API.Services
     }
 
     /// <inheritdoc />
+    public string GetSignInUrl()
+    {
+      var clientId = _configuration["AWS:UserPoolClientId"];
+      var redirectUri = _configuration["AWS:RedirectUri"];
+      var domain = _configuration["AWS:UserPoolDomain"];
+      var responseType = _configuration["AWS:ResponseType"];
+      var region = _configuration["AWS:Region"];
+      // return cognito hosted ui url
+      return $"https://{domain}.auth.{region}.amazoncognito.com/login?client_id={clientId}&response_type={responseType}&scope=email&redirect_uri={redirectUri}";
+    }
+
+    /// <inheritdoc />
     public async Task<(string accessToken, string refreshToken, bool isSuccess)> ExchangeTokens(string code)
     {
       if (string.IsNullOrEmpty(code))

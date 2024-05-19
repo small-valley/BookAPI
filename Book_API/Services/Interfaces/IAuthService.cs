@@ -5,6 +5,12 @@ namespace Book_API.Services.Interfaces
   public interface IAuthService
   {
     /// <summary>
+    /// Get the signin URL
+    /// </summary>
+    /// <returns></returns>
+    string GetSignInUrl();
+    
+    /// <summary>
     /// Exchange the authorization code for tokens
     /// </summary>
     /// <param name="code"></param>

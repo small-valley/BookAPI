@@ -21,6 +21,13 @@ namespace Book_API.Controllers
       _configuration = configuration;
       _authService = authService;
     }
+    [HttpGet("signin")]
+
+    public IActionResult SignIn()
+    {
+      var url = _authService.GetSignInUrl();
+      return new JsonResult(url);
+    }
 
     [HttpGet("callback")]
     public async Task<IActionResult> Callback(string code)
