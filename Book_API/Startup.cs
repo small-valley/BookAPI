@@ -86,7 +86,7 @@ namespace BookDBAPI
         options.AddPolicy(MY_ALLOW_SPECIFIC_ORIGINS, builder =>
         {
           builder
-                .WithOrigins("http://localhost:4200", "https://localhost:4200")
+                .WithOrigins("http://localhost:4200", "https://localhost:4200", "http://angular-app-lkagi.s3-website-us-west-2.amazonaws.com")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
@@ -102,6 +102,8 @@ namespace BookDBAPI
       });
 
       services.AddDbContext<BookContext>(options => options.UseMySQL(_configuration.GetConnectionString(CONNECTION_STRING_KEY)));
+      services.AddHttpContextAccessor();
+      services.AddTransient<IJwtTokenService, JwtTokenService>();
       services.AddTransient<IAuthService, AuthService>();
       services.AddTransient<IBookService, BookService>();
       services.AddTransient<IAuthorService, AuthorService>();

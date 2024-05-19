@@ -16,10 +16,12 @@ namespace Book_API.Services
   public class BookService : IBookService
   {
     private readonly BookContext _dbContext;
+    private readonly IJwtTokenService _jwtTokenService;
 
-    public BookService(BookContext dbContext)
+    public BookService(BookContext dbContext, IJwtTokenService jwtTokenService)
     {
       _dbContext = dbContext;
+      _jwtTokenService = jwtTokenService;
     }
 
     /// <summary>
