@@ -35,7 +35,7 @@ namespace BookDBAPI
     public Startup(IConfiguration configuration)
     {
       _configuration = configuration;
-      AppSettings.Init(_configuration.GetConnectionString(CONNECTION_STRING_KEY));
+      AppSettings.Init(_configuration[$"ConnectionStrings:{CONNECTION_STRING_KEY}"]);
     }
 
 
