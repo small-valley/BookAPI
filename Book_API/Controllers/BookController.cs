@@ -43,7 +43,7 @@ namespace Book_API.Controllers
     /// <param name="data">登録対象データ</param>
     /// <returns>処理結果</returns>
     [HttpPost]
-    public IActionResult InsertData([FromBody] List<BookItem> data) => _bookService.InsertData(data);
+    public IActionResult InsertData([FromBody] List<BookItemPostModel> data) => _bookService.InsertData(data);
 
     /// <summary>
     /// 本データ更新

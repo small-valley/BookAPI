@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -88,7 +88,7 @@ namespace Book_API.Services
     /// </summary>
     /// <param name="data">データ</param>
     /// <returns>処理結果</returns>
-    public IActionResult InsertData(List<BookItem> data)
+    public IActionResult InsertData(List<BookItemPostModel> data)
     {
       foreach (var rec in data)
       {
@@ -110,7 +110,7 @@ namespace Book_API.Services
     /// 著者の登録
     /// </summary>
     /// <param name="data">データ</param>
-    private Guid InsertAuthor(BookItem data)
+    private Guid InsertAuthor(BookItemPostModel data)
     {
       var author = this._dbContext.Author.FirstOrDefault(x => x.AuthorName == data.Author);
 
@@ -133,7 +133,7 @@ namespace Book_API.Services
     /// 出版社の登録
     /// </summary>
     /// <param name="data">データ</param>
-    private Guid InsertPublisher(BookItem data)
+    private Guid InsertPublisher(BookItemPostModel data)
     {
       var publisher = this._dbContext.Publisher.FirstOrDefault(x => x.PublisherName == data.Publisher);
 
@@ -156,7 +156,7 @@ namespace Book_API.Services
     /// 分類の登録
     /// </summary>
     /// <param name="data">データ</param>
-    private Guid InsertClass(BookItem data)
+    private Guid InsertClass(BookItemPostModel data)
     {
       var classData = this._dbContext.Class.FirstOrDefault(x => x.ClassName == data.Class);
 
@@ -182,7 +182,7 @@ namespace Book_API.Services
     /// <param name="authorId">著者ID</param>
     /// <param name="publisherId">出版社ID</param>
     /// <param name="classId">分類ID</param>
-    private Guid InsertBook(BookItem data, Guid authorId, Guid publisherId, Guid classId)
+    private Guid InsertBook(BookItemPostModel data, Guid authorId, Guid publisherId, Guid classId)
     {
       var book = this._dbContext.Book.FirstOrDefault(x => x.Date == data.Date && x.Title == data.Title);
 
