@@ -9,7 +9,7 @@ namespace Book_API.Services.Interfaces
     /// </summary>
     /// <returns></returns>
     string GetSignInUrl();
-    
+
     /// <summary>
     /// Exchange the authorization code for tokens
     /// </summary>

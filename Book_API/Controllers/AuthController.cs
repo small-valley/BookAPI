@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 using Book_API.Services.Interfaces;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -21,8 +22,12 @@ namespace Book_API.Controllers
       _configuration = configuration;
       _authService = authService;
     }
-    [HttpGet("signin")]
 
+    [HttpGet("verify")]
+    [Authorize]
+    public IActionResult Verify() => new OkResult();
+
+    [HttpGet("signin")]
     public IActionResult SignIn()
     {
       var url = _authService.GetSignInUrl();
@@ -32,9 +37,9 @@ namespace Book_API.Controllers
     [HttpGet("callback")]
     public async Task<IActionResult> Callback(string code)
     {
-      var result = await _authService.ExchangeTokens(code);
+      var (accessToken, refreshToken, isSuccess) = await _authService.ExchangeTokens(code);
 
-      if (result.isSuccess == false)
+      if (isSuccess == false)
       {
         return Redirect(_configuration["Frontend:AuthFailRedirectUri"]);
       }
@@ -48,10 +53,10 @@ namespace Book_API.Controllers
         Expires = DateTime.UtcNow.AddDays(1)
       };
 
-      Response.Cookies.Append("access_token", result.accessToken, cookieOptions);
-      Response.Cookies.Append("refresh_token", result.refreshToken, cookieOptions);
+      Response.Cookies.Append("access_token", accessToken, cookieOptions);
+      Response.Cookies.Append("refresh_token", refreshToken, cookieOptions);
 
-      // Redirect to the front-end home page
+      // Redirect to the frontend home page
       return Redirect(_configuration["Frontend:SigninSuccessRedirectUri"]);
     }
   }
