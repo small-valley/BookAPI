@@ -63,6 +63,7 @@ namespace Book_API.Services
           .OrderBy(x => x.Book.Date)
           .Select(x => new BookItem
           {
+            Id = x.Book.Id,
             Date = x.Book.Date.Value,
             Title = x.Book.Title ?? string.Empty,
             AuthorId = x.Book.AuthorId,
