@@ -5,11 +5,17 @@ WORKDIR /app
 RUN apt-get update && \
     apt-get install -y nodejs npm && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-RUN npm install -g aws-cdk
+    rm -rf /var/lib/apt/lists/* && \
+    npm install -g aws-cdk
+
+# Add alias commands
+RUN alias format="dotnet format"
+RUN alias database:update="dotnet ef database update --project Book_API/Book_API.csproj"
 
 # Add Path to the .NET tools
 ENV PATH="/root/.dotnet/tools:$PATH"
+
+# Add aws configurations for cdk deploy
 ENV AWS_DEFAULT_REGION=
 ENV AWS_ACCOUNT_ID=
 ENV AWS_ACCESS_KEY_ID=

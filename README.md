@@ -31,3 +31,14 @@
 -   Apply format
 
     `dotnet format`
+
+## Build Commands
+
+-   Debug build
+
+    `dotnet build`
+
+-   Publish build for Lambda environment
+
+    `dotnet publish -c Release -r linux-x64`
+    

@@ -2,7 +2,7 @@ services:
     backend:
         build:
             context: .
-            dockerfile: .docker/Dockerfile
+            dockerfile: .docker/dev/Dockerfile
         container_name: dotnet-backend
         ports:
             - "5001:5001"
