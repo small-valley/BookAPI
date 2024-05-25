@@ -5,14 +5,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace Book_EF.Migrations
 {
     [DbContext(typeof(BookContext))]
-    [Migration("20240505074449_Initial")]
-    partial class Initial
+    [Migration("20240524202613_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,7 +21,9 @@ namespace Book_EF.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.4")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Book_EF.EntityModels.Author", b =>
                 {
@@ -54,7 +57,7 @@ namespace Book_EF.Migrations
                         .HasColumnType("char(36)")
                         .HasColumnName("class_id");
 
-                    b.Property<DateOnly?>("Date")
+                    b.Property<DateTime?>("Date")
                         .HasColumnType("date")
                         .HasColumnName("date");
 
@@ -67,7 +70,7 @@ namespace Book_EF.Migrations
                         .HasColumnName("is_recommend");
 
                     b.Property<int?>("PageCount")
-                        .HasColumnType("int(11)")
+                        .HasColumnType("integer")
                         .HasColumnName("page_count");
 
                     b.Property<string>("PublishYear")
@@ -95,7 +98,7 @@ namespace Book_EF.Migrations
                         .HasColumnName("id");
 
                     b.Property<string>("ClassName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -110,7 +113,7 @@ namespace Book_EF.Migrations
                         .HasColumnName("id");
 
                     b.Property<string>("PublisherName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

@@ -18,22 +18,36 @@ services:
                 # dotnet watch run --urls https://0.0.0.0:5001 --project Book_API/Book_API.csproj
                 dotnet watch run --urls https://0.0.0.0:5001 --project Book_Lambda/src/Book_Lambda.csproj
             "
-        environment:
-            - ASPNETCORE_ENVIRONMENT=Production
-            - CONNECTION_STRING=Server=mysql;Database=your_database_name;User=root;Password=your_password;
         depends_on:
-            - mysql
+            - database
 
-    mysql:
-        image: mysql:8.0
-        container_name: mysql-db
+    # mysql:
+    #     image: mysql:8.0
+    #     container_name: mysql-db
+    #     ports:
+    #         - "3306:3306"
+    #     environment:
+    #         - MYSQL_ROOT_PASSWORD=your_password
+    #         - MYSQL_DATABASE=your_database_name
+    #     volumes:
+    #         - database-data:/var/lib/mysql
+
+    database:
+        image: postgres:13
+        container_name: postgres-db
         ports:
-            - "3306:3306"
+            - "5432:5432"
         environment:
-            - MYSQL_ROOT_PASSWORD=your_password
-            - MYSQL_DATABASE=your_database_name
+            - POSTGRES_PASSWORD=your_password
+            - POSTGRES_DB=your_database_name
         volumes:
-            - mysql-data:/var/lib/mysql
+            - database-data:/var/lib/postgresql/data
+        # command:
+        #     - /bin/sh
+        #     - -c
+        #     - |
+        #       echo 'host    all             all             0.0.0.0/0               trust' >> /var/lib/postgresql/data/pg_hba.conf
+        #       exec docker-entrypoint.sh postgres -c 'config_file=/var/lib/postgresql/data/postgresql.conf'
 
 volumes:
-    mysql-data:
+    database-data:

@@ -21,7 +21,7 @@ namespace Book_EF.EntityModels
     public Guid? ClassId { get; set; }
     [Column("publish_year", TypeName = "char(4)")]
     public string? PublishYear { get; set; }
-    [Column("page_count", TypeName = "int(11)")]
+    [Column("page_count", TypeName = "integer")]
     public int? PageCount { get; set; }
     [DefaultValue(false)]
     [Column("is_recommend", TypeName = "boolean")]
