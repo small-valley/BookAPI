@@ -15,22 +15,35 @@ namespace AwsCdk
         Runtime = Runtime.DOTNET_8,
         MemorySize = 1024,
         Handler = "Book_Lambda::Book_Lambda.LambdaEntryPoint::FunctionHandlerAsync",
-        Code = Code.FromAsset("../Book_Lambda/src/Book_Lambda/bin/Release/net8.0/publish"),
+        Code = Code.FromAsset("../Book_Lambda/src/bin/Release/net8.0/linux-x64"),
       });
 
       var api = new LambdaRestApi(this, "BookApi", new LambdaRestApiProps
       {
         Handler = bookLambdaFunction,
-        Proxy = false
+        Proxy = false,
+        DefaultCorsPreflightOptions = new CorsOptions {
+            AllowOrigins = ["http://localhost:4200", "https://d156kak9mkyj4s.cloudfront.net"],
+            AllowMethods = Cors.ALL_METHODS,
+            AllowCredentials = true,
+        }
       });
 
-      var values = api.Root.AddResource("api").AddResource("values");
-      values.AddMethod("GET"); // GET /items
-      values.AddMethod("POST"); // POST /items
-      var valuesId = values.AddResource("{id}");
-      valuesId.AddMethod("GET"); // GET /items/{id}
-      valuesId.AddMethod("PUT"); // PUT /items/{id}
-      valuesId.AddMethod("DELETE"); // DELETE /items/{id}
+
+      var root = api.Root.AddResource("api");
+      var auth = root.AddResource("auth");
+      auth.AddResource("verify").AddMethod("GET");
+      auth.AddResource("signin").AddMethod("GET");
+      auth.AddResource("callback").AddMethod("GET");
+      var author = root.AddResource("author");
+      author.AddMethod("GET");
+      author.AddResource("cnt").AddMethod("GET");
+      var book = root.AddResource("book");
+      book.AddMethod("GET");
+      book.AddMethod("POST");
+      book.AddMethod("PUT");
+      book.AddMethod("DELETE");
+      book.AddResource("cnt").AddMethod("GET");
     }
   }
 }
