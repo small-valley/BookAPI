@@ -26,6 +26,10 @@ namespace AwsCdk
         MemorySize = 1024,
         Handler = "Book_Lambda::Book_Lambda.LambdaEntryPoint::FunctionHandlerAsync",
         Code = Code.FromAsset("../Book_Lambda/src/bin/Release/net8.0/linux-x64/publish"),
+        Environment = new Dictionary<string, string>
+        {
+            { "ConnectionStrings__DefaultConnection", System.Environment.GetEnvironmentVariable("DEFAULT_CONNECTION_STRING") },
+        }
       });
 
       // Create a Lambda function which does needs to be connected with the Internet
@@ -35,6 +39,18 @@ namespace AwsCdk
         MemorySize = 1024,
         Handler = "Book_Lambda::Book_Lambda.LambdaEntryPoint::FunctionHandlerAsync",
         Code = Code.FromAsset("../Book_Lambda/src/bin/Release/net8.0/linux-x64/publish"),
+        Environment = new Dictionary<string, string>
+        {
+            { "AWS__Region", System.Environment.GetEnvironmentVariable("AWS_DEFAULT_REGION") },
+            { "AWS__UserPoolId", System.Environment.GetEnvironmentVariable("AWS_COGNITO_USER_POOL_ID") },
+            { "AWS__UserPoolClientId", System.Environment.GetEnvironmentVariable("AWS_COGNITO_USER_POOL_CLIENT_ID") },
+            { "AWS__UserPoolClientSecret", System.Environment.GetEnvironmentVariable("AWS_COGNITO_USER_POOL_CLIENT_SECRET") },
+            { "AWS__UserPoolDomain", System.Environment.GetEnvironmentVariable("AWS_COGNITO_USER_POOL_DOMAIN") },
+            { "AWS__RedirectUri", System.Environment.GetEnvironmentVariable("AWS_COGNITO_REDIRECT_URI") },
+            { "Frontend__SigninSuccessRedirectUri", System.Environment.GetEnvironmentVariable("SIGNIN_SUCCESS_REDIRECT_URI") },
+            { "Frontend__AuthFailRedirectUri", System.Environment.GetEnvironmentVariable("AUTH_FAIL_REDIRECT_URI") },
+            { "Frontend__CookieDomain", System.Environment.GetEnvironmentVariable("COOKIE_DOMAIN") },
+        }
       });
 
       // Create a Lambda Rest API through API Gateway
