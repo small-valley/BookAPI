@@ -46,19 +46,19 @@ jobs:
       - name: Install CDK
         run: npm install -g aws-cdk
 
-      - name: Install dotnet ef tool
-        run: |
-          dotnet restore
-          dotnet tool install --global dotnet-ef
+      # - name: Install dotnet ef tool
+      #   run: |
+      #     dotnet restore
+      #     dotnet tool install --global dotnet-ef
 
-      - name: Migration
-        run: |
-          mkdir ~/.ssh
-          ssh-keyscan -H $BASTION_HOST >> ~/.ssh/known_hosts
-          eval `ssh-agent -s`
-          ssh-add - <<< "$BASTION_SSH_KEY"
-          ssh -fN -v -L $POSTGRE_DATABASE_PORT:$POSTGRES_DATABASE_HOST:$POSTGRE_DATABASE_PORT $BASTION_USER@$BASTION_HOST
-          dotnet ef database update --project Book_Lambda/src/Book_Lambda.csproj
+      # - name: Migration
+      #   run: |
+      #     mkdir ~/.ssh
+      #     ssh-keyscan -H $BASTION_HOST >> ~/.ssh/known_hosts
+      #     eval `ssh-agent -s`
+      #     ssh-add - <<< "$BASTION_SSH_KEY"
+      #     ssh -fN -v -L $POSTGRE_DATABASE_PORT:$POSTGRES_DATABASE_HOST:$POSTGRE_DATABASE_PORT $BASTION_USER@$BASTION_HOST
+      #     dotnet ef database update --project Book_Lambda/src/Book_Lambda.csproj
 
       - name: Publish .NET application
         run: |
