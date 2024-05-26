@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Book_Lambda.Controllers;
 [ApiController]
 [RequireHttps, Route("api/[controller]")]
-[Authorize]
+//[Authorize]
 public class BookController : ControllerBase
 {
   private readonly IBookService _bookService;

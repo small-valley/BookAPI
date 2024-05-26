@@ -34,41 +34,41 @@ public class Startup
     //services.AddMvc();
     services.AddControllers();
 
-    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-      .AddJwtBearer(options =>
-        {
-          options.TokenValidationParameters = new TokenValidationParameters
-          {
-            IssuerSigningKeyResolver = (s, securityToken, identifier, parameters) =>
-            {
-              // get JsonWebKeySet from AWS Cognito
-              var json = new HttpClient().GetStringAsync($"https://cognito-idp.{_configuration["AWS:Region"]}.amazonaws.com/{_configuration["AWS:UserPoolId"]}/.well-known/jwks.json").GetAwaiter().GetResult();
-              // serialize the result and return the keys
-              return JsonSerializer.Deserialize<JsonWebKeySet>(json)?.Keys;
-            },
-            ValidateIssuerSigningKey = true,
-            ValidateIssuer = true,
-            ValidIssuer = $"https://cognito-idp.{_configuration["AWS:Region"]}.amazonaws.com/{_configuration["AWS:UserPoolId"]}",
-            ValidateAudience = false,
-            ValidateLifetime = true,
-          };
+    // services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    //   .AddJwtBearer(options =>
+    //     {
+    //       options.TokenValidationParameters = new TokenValidationParameters
+    //       {
+    //         IssuerSigningKeyResolver = (s, securityToken, identifier, parameters) =>
+    //         {
+    //           // get JsonWebKeySet from AWS Cognito
+    //           var json = new HttpClient().GetStringAsync($"https://cognito-idp.{_configuration["AWS:Region"]}.amazonaws.com/{_configuration["AWS:UserPoolId"]}/.well-known/jwks.json").GetAwaiter().GetResult();
+    //           // serialize the result and return the keys
+    //           return JsonSerializer.Deserialize<JsonWebKeySet>(json)?.Keys;
+    //         },
+    //         ValidateIssuerSigningKey = true,
+    //         ValidateIssuer = true,
+    //         ValidIssuer = $"https://cognito-idp.{_configuration["AWS:Region"]}.amazonaws.com/{_configuration["AWS:UserPoolId"]}",
+    //         ValidateAudience = false,
+    //         ValidateLifetime = true,
+    //       };
 
-          options.Events = new JwtBearerEvents
-          {
-            OnAuthenticationFailed = context =>
-            {
-              if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-              {
-                context.Response.Headers.Append("Token-Expired", "true");
-                context.Response.Redirect($"{_configuration["Frontend:AuthFailRedirectUri"]}");
-              }
-              return Task.CompletedTask;
-            }
-          };
-        });
+    //       options.Events = new JwtBearerEvents
+    //       {
+    //         OnAuthenticationFailed = context =>
+    //         {
+    //           if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+    //           {
+    //             context.Response.Headers.Append("Token-Expired", "true");
+    //             context.Response.Redirect($"{_configuration["Frontend:AuthFailRedirectUri"]}");
+    //           }
+    //           return Task.CompletedTask;
+    //         }
+    //       };
+    //     });
 
-    services.AddDefaultAWSOptions(_configuration.GetAWSOptions());
-    services.AddAWSService<IAmazonCognitoIdentityProvider>();
+    // services.AddDefaultAWSOptions(_configuration.GetAWSOptions());
+    // services.AddAWSService<IAmazonCognitoIdentityProvider>();
 
     services.AddCors(options =>
     {
@@ -114,10 +114,10 @@ public class Startup
 
     app.UseCors(MY_ALLOW_SPECIFIC_ORIGINS);
     app.UseHttpsRedirection();
-    app.UseMiddleware<TokenMiddleware>();
+    //app.UseMiddleware<TokenMiddleware>();
     app.UseRouting();
-    app.UseAuthentication();
-    app.UseAuthorization();
+    // app.UseAuthentication();
+    // app.UseAuthorization();
 
     app.UseEndpoints(endpoints =>
     {

@@ -1,6 +1,5 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Environment;
 using System.Linq;
 
 using Amazon.CDK;
@@ -33,8 +32,8 @@ namespace AwsCdk
 
         Env = new Amazon.CDK.Environment
         {
-          Account = GetEnvironmentVariable("AWS_ACCOUNT_ID"),
-          Region = GetEnvironmentVariable("AWS_DEFAULT_REGION"),
+          Account = System.Environment.GetEnvironmentVariable("AWS_ACCOUNT_ID"),
+          Region = System.Environment.GetEnvironmentVariable("AWS_DEFAULT_REGION"),
         }
 
 

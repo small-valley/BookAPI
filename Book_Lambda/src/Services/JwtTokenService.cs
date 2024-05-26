@@ -18,7 +18,7 @@ public class JwtTokenService : IJwtTokenService
     var payload = GetPayload();
     if (payload.TryGetValue("sub", out object? claimValue))
     {
-        return Guid.Parse(claimValue?.ToString() ?? string.Empty);
+      return Guid.Parse(claimValue?.ToString() ?? string.Empty);
     }
     return default;
   }

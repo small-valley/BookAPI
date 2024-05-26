@@ -1,6 +1,7 @@
 using Amazon.CDK;
 using Amazon.CDK.AWS.APIGateway;
 using Amazon.CDK.AWS.Lambda;
+using Amazon.CDK.AWS.Cognito;
 
 using Constructs;
 
@@ -11,7 +12,7 @@ namespace AwsCdk
     internal AwsCdkStack(Construct scope, string id, IStackProps props = null) : base(scope, id, props)
     {
       // Lookup the existing Cognito User Pool
-      var userPool = UserPool.FromUserPoolId(this, "UserPool", GetEnvironmentVariable("AWS_COGNITO_USER_POOL_ID"));
+      var userPool = UserPool.FromUserPoolId(this, "UserPool", System.Environment.GetEnvironmentVariable("AWS_COGNITO_USER_POOL_ID"));
       // Create a Cognito Authorizer
       var authorizer = new CognitoUserPoolsAuthorizer(this, "CognitoAuthorizer", new CognitoUserPoolsAuthorizerProps
       {
@@ -66,19 +67,21 @@ namespace AwsCdk
       {
         AuthorizationType = AuthorizationType.COGNITO,
         Authorizer = authorizer,
+        // if not specified, authorizer validates token as an identity token, not an access token
+        AuthorizationScopes = [ "email" ]
       };
 
       // Create API endpoints on API Gateway
       var root = api.Root.AddResource("api");
       var author = root.AddResource("author");
-      author.AddMethod("GET", methodOption);
-      author.AddResource("cnt").AddMethod("GET", methodOption);
+      author.AddMethod("GET", new LambdaIntegration(bookLambdaFunction), methodOption);
+      author.AddResource("cnt").AddMethod("GET", new LambdaIntegration(bookLambdaFunction), methodOption);
       var book = root.AddResource("book");
-      book.AddMethod("GET", methodOption);
-      book.AddMethod("POST", methodOption);
-      book.AddMethod("PUT", methodOption);
-      book.AddMethod("DELETE", methodOption);
-      book.AddResource("cnt").AddMethod("GET", methodOption);
+      book.AddMethod("GET", new LambdaIntegration(bookLambdaFunction), methodOption);
+      book.AddMethod("POST", new LambdaIntegration(bookLambdaFunction), methodOption);
+      book.AddMethod("PUT", new LambdaIntegration(bookLambdaFunction), methodOption);
+      book.AddMethod("DELETE", new LambdaIntegration(bookLambdaFunction), methodOption);
+      book.AddResource("cnt").AddMethod("GET", new LambdaIntegration(bookLambdaFunction), methodOption);
 
       var rootAuth = apiAuth.Root.AddResource("api");
       var auth = rootAuth.AddResource("auth");

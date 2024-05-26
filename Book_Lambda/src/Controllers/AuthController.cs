@@ -23,7 +23,7 @@ public class AuthController : ControllerBase
   }
 
   [HttpGet("verify")]
-  [Authorize]
+  //[Authorize]
   public IActionResult Verify() => new OkResult();
 
   [HttpGet("signin")]
@@ -46,10 +46,11 @@ public class AuthController : ControllerBase
     // Set the tokens in cookies
     var cookieOptions = new CookieOptions
     {
-      HttpOnly = true,
+      HttpOnly = false,
       Secure = true,
-      SameSite = SameSiteMode.None,
-      Expires = DateTime.UtcNow.AddDays(1)
+      SameSite = SameSiteMode.Strict,
+      Expires = DateTime.UtcNow.AddDays(1),
+      Domain = _configuration["Frontend:CookieDomain"],
     };
 
     Response.Cookies.Append("access_token", accessToken, cookieOptions);
