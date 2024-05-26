@@ -85,7 +85,7 @@ namespace AwsCdk
       {
         AuthorizationType = AuthorizationType.COGNITO,
         Authorizer = authorizer,
-        // if not specified, authorizer validates token as an identity token, not an access token
+        // if not specified, the authorizer validates token as an identity token, not an access token
         AuthorizationScopes = [ "email" ]
       };
 
@@ -103,7 +103,7 @@ namespace AwsCdk
 
       var rootAuth = apiAuth.Root.AddResource("api");
       var auth = rootAuth.AddResource("auth");
-      auth.AddResource("verify").AddMethod("GET");
+      auth.AddResource("verify").AddMethod("GET", new LambdaIntegration(bookLambdaFunctionAuth), methodOption);
       auth.AddResource("signin").AddMethod("GET");
       auth.AddResource("callback").AddMethod("GET");
     }
