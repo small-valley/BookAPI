@@ -27,6 +27,7 @@ jobs:
       SIGNIN_SUCCESS_REDIRECT_URI: ${{ secrets.SIGNIN_SUCCESS_REDIRECT_URI }}
       AUTH_FAIL_REDIRECT_URI: ${{ secrets.AUTH_FAIL_REDIRECT_URI }}
       COOKIE_DOMAIN: ${{ secrets.COOKIE_DOMAIN }}
+      ConnectionStrings__DefaultConnection: ${{ secrets.DEFAULT_CONNECTION_STRING }}
 
     steps:
       - name: Checkout repository
