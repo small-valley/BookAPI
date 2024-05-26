@@ -100,7 +100,7 @@ namespace AwsCdk
       book.AddMethod("PUT", new LambdaIntegration(bookLambdaFunction), methodOption);
       book.AddMethod("DELETE", new LambdaIntegration(bookLambdaFunction), methodOption);
       book.AddResource("cnt").AddMethod("GET", new LambdaIntegration(bookLambdaFunction), methodOption);
-      var verify = root.addResource("auth");
+      var verify = root.AddResource("auth");
       verify.AddResource("verify").AddMethod("GET", new LambdaIntegration(bookLambdaFunction), methodOption);
 
       var rootAuth = apiAuth.Root.AddResource("api");
