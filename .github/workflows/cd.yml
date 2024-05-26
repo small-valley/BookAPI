@@ -1,0 +1,52 @@
+name: Deploy Book Lambda Stack
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: BookLambda
+    env:
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_COGNITO_USER_POOL_ID: ${{ secrets.AWS_COGNITO_USER_POOL_ID }}
+      ConnectionStrings__DefaultConnection: ${{ secrets.DEFAULT_CONNECTION_STRING }}
+      AWS__Region: ${{ secrets.AWS_DEFAULT_REGION }}
+      AWS__UserPoolId: ${{ secrets.AWS_COGNITO_USER_POOL_ID }}
+      AWS__UserPoolClientId: ${{ secrets.AWS_COGNITO_USER_POOL_CLIENT_ID }}
+      AWS__UserPoolClientSecret: ${{ secrets.AWS_COGNITO_USER_POOL_CLIENT_SECRET }}
+      AWS__UserPoolDomain: ${{ secrets.AWS_COGNITO_USER_POOL_DOMAIN }}
+      AWS__RedirectUri: ${{ secrets.AWS_COGNITO_REDIRECT_URI }}
+      Frontend__SigninSuccessRedirectUri: ${{ secrets.SIGNIN_SUCCESS_REDIRECT_URI }}
+      Frontend__AuthFailRedirectUri: ${{ secrets.AUTH_FAIL_REDIRECT_URI }}
+      Frontend__CookieDomain: ${{ secrets.COOKIE_DOMAIN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install CDK
+        run: npm install -g aws-cdk
+
+      - name: Publish .NET application
+        run: |
+          dotnet publish -c Release -r linux-x64
+
+      - name: Deploy CDK Stack
+        run: |
+          cd aws-cdk && cdk deploy --require-approval never

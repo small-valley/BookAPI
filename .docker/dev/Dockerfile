@@ -11,6 +11,7 @@ RUN apt-get update && \
 # Add alias commands
 RUN alias format="dotnet format"
 RUN alias database:update="dotnet ef database update --project Book_API/Book_API.csproj"
+RUN alias dotnet:publish="dotnet publish -c Release -r linux-x64"
 
 # Add Path to the .NET tools
 ENV PATH="/root/.dotnet/tools:$PATH"
