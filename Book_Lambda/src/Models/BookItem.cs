@@ -5,11 +5,11 @@ public class BookItemSearchKey
 {
   public DateOnly? From { get; set; }
   public DateOnly? To { get; set; }
-  public string Title { get; set; }
-  public string Author { get; set; }
-  public string Publisher { get; set; }
-  public string Class { get; set; }
-  public string PublishYear { get; set; }
+  public string? Title { get; set; }
+  public string? Author { get; set; }
+  public string? Publisher { get; set; }
+  public string? Class { get; set; }
+  public string? PublishYear { get; set; }
   public bool? IsRecommend { get; set; }
 }
 
