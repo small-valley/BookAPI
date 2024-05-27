@@ -48,7 +48,7 @@ public class AuthController : ControllerBase
     {
       HttpOnly = false,
       Secure = true,
-      SameSite = SameSiteMode.None,
+      SameSite = SameSiteMode.Lax,
       Expires = DateTime.UtcNow.AddDays(1),
       //Domain = _configuration["Frontend:CookieDomain"],
     };
