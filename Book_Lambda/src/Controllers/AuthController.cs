@@ -59,8 +59,8 @@ public class AuthController : ControllerBase
 
     Response.Cookies.Append("access_token", accessToken, cookieOptions);
     Response.Cookies.Append("refresh_token", refreshToken, cookieOptions);
-    return Ok("set cookie");
+
     // Redirect to the frontend home page
-    //return Redirect(_configuration["Frontend:SigninSuccessRedirectUri"]);
+    return Redirect(_configuration["Frontend:SigninSuccessRedirectUri"]);
   }
 }
