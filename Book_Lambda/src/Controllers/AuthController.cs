@@ -50,15 +50,15 @@ public class AuthController : ControllerBase
       Secure = true,
       SameSite = SameSiteMode.Lax,
       Expires = DateTime.UtcNow.AddDays(1),
-      //Domain = _configuration["Frontend:CookieDomain"],
+      Domain = _configuration["Frontend:CookieDomain"],
     };
 
     Console.WriteLine($"{isSuccess} {accessToken} {refreshToken} {cookieOptions.Domain} {cookieOptions.Expires} {cookieOptions.Secure} {cookieOptions.HttpOnly} {cookieOptions.SameSite}");
 
     Response.Cookies.Append("access_token", accessToken, cookieOptions);
     Response.Cookies.Append("refresh_token", refreshToken, cookieOptions);
-    return new OkResult();
+
     // Redirect to the frontend home page
-    //return Redirect(_configuration["Frontend:SigninSuccessRedirectUri"]);
+    return Redirect(_configuration["Frontend:SigninSuccessRedirectUri"]);
   }
 }
