@@ -47,11 +47,11 @@ public class AuthController : ControllerBase
     // Set the tokens in cookies
     var cookieOptions = new CookieOptions
     {
-      HttpOnly = false,
-      Secure = true,
-      SameSite = SameSiteMode.None,
-      Expires = DateTime.UtcNow.AddDays(1),
-      Path = "/",
+      // HttpOnly = false,
+      // Secure = true,
+      // SameSite = SameSiteMode.None,
+      // Expires = DateTime.UtcNow.AddDays(1),
+      // Path = "/",
       //Domain = _configuration["Frontend:CookieDomain"],
     };
 
