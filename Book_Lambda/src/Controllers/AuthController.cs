@@ -47,8 +47,8 @@ public class AuthController : ControllerBase
     var cookieOptions = new CookieOptions
     {
       HttpOnly = false,
-      Secure = true,
-      //SameSite = SameSiteMode.None,
+      Secure = false,
+      SameSite = SameSiteMode.None,
       //Expires = DateTime.UtcNow.AddDays(1),
       Path = "/",
       Domain = _configuration["Frontend:CookieDomain"],
