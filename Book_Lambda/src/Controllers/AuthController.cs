@@ -53,6 +53,8 @@ public class AuthController : ControllerBase
       Domain = _configuration["Frontend:CookieDomain"],
     };
 
+    Console.WriteLine($"{isSuccess} {accessToken} {refreshToken} {cookieOptions.Domain} {cookieOptions.Expires} {cookieOptions.Secure} {cookieOptions.HttpOnly} {cookieOptions.SameSite}");
+
     Response.Cookies.Append("access_token", accessToken, cookieOptions);
     Response.Cookies.Append("refresh_token", refreshToken, cookieOptions);
 
