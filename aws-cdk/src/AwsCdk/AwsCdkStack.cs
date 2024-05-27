@@ -92,14 +92,14 @@ namespace AwsCdk
       // Create API endpoints on API Gateway
       var root = api.Root.AddResource("api");
       var author = root.AddResource("author");
-      author.AddMethod("GET", new LambdaIntegration(bookLambdaFunction), methodOption);
-      author.AddResource("cnt").AddMethod("GET", new LambdaIntegration(bookLambdaFunction), methodOption);
+      author.AddMethod("GET", new LambdaIntegration(bookLambdaFunction));
+      author.AddResource("cnt").AddMethod("GET", new LambdaIntegration(bookLambdaFunction));
       var book = root.AddResource("book");
-      book.AddMethod("GET", new LambdaIntegration(bookLambdaFunction), methodOption);
-      book.AddMethod("POST", new LambdaIntegration(bookLambdaFunction), methodOption);
-      book.AddMethod("PUT", new LambdaIntegration(bookLambdaFunction), methodOption);
-      book.AddMethod("DELETE", new LambdaIntegration(bookLambdaFunction), methodOption);
-      book.AddResource("cnt").AddMethod("GET", new LambdaIntegration(bookLambdaFunction), methodOption);
+      book.AddMethod("GET", new LambdaIntegration(bookLambdaFunction));
+      book.AddMethod("POST", new LambdaIntegration(bookLambdaFunction));
+      book.AddMethod("PUT", new LambdaIntegration(bookLambdaFunction));
+      book.AddMethod("DELETE", new LambdaIntegration(bookLambdaFunction));
+      book.AddResource("cnt").AddMethod("GET", new LambdaIntegration(bookLambdaFunction));
       var verify = root.AddResource("auth");
       verify.AddResource("verify").AddMethod("GET");
 
