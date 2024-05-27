@@ -83,10 +83,10 @@ namespace AwsCdk
       // Create a method option for the API Gateway
       var methodOption = new MethodOptions
       {
-        AuthorizationType = AuthorizationType.COGNITO,
-        Authorizer = authorizer,
-        // if not specified, the authorizer validates token as an identity token, not an access token
-        AuthorizationScopes = [ "email" ]
+        // AuthorizationType = AuthorizationType.COGNITO,
+        // Authorizer = authorizer,
+        // // if not specified, the authorizer validates token as an identity token, not an access token
+        // AuthorizationScopes = [ "email" ]
       };
 
       // Create API endpoints on API Gateway
