@@ -50,7 +50,7 @@ public class AuthController : ControllerBase
       Secure = true,
       SameSite = SameSiteMode.None,
       Expires = DateTime.UtcNow.AddDays(1),
-      Domain = _configuration["Frontend:CookieDomain"],
+      //Domain = _configuration["Frontend:CookieDomain"],
     };
 
     Console.WriteLine($"{isSuccess} {accessToken} {refreshToken} {cookieOptions.Domain} {cookieOptions.Expires} {cookieOptions.Secure} {cookieOptions.HttpOnly} {cookieOptions.SameSite}");
