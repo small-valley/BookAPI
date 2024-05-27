@@ -48,9 +48,11 @@ public class AuthController : ControllerBase
     {
       HttpOnly = false,
       Secure = true,
-      SameSite = SameSiteMode.None,
-      Expires = DateTime.UtcNow.AddDays(1),
+      //SameSite = SameSiteMode.None,
+      //Expires = DateTime.UtcNow.AddDays(1),
+      Path = "/",
       Domain = _configuration["Frontend:CookieDomain"],
+      IsEssential = true,
     };
 
     Console.WriteLine($"{isSuccess} {accessToken} {refreshToken} {cookieOptions.Domain} {cookieOptions.Expires} {cookieOptions.Secure} {cookieOptions.HttpOnly} {cookieOptions.SameSite}");
