@@ -6,7 +6,7 @@ namespace Book_EF.EntityModels
   public partial class Author
   {
     [Key]
-    [Column("id", TypeName = "char(36)")]
+    [Column("id", TypeName = "uuid")]
     public Guid Id { get; set; }
 
     [MaxLength(50)]

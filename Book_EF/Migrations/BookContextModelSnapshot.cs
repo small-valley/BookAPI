@@ -26,7 +26,7 @@ namespace Book_EF.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<string>("AuthorName")
@@ -43,15 +43,15 @@ namespace Book_EF.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<Guid?>("AuthorId")
-                        .HasColumnType("char(36)")
+                        .HasColumnType("uuid")
                         .HasColumnName("author_id");
 
                     b.Property<Guid?>("ClassId")
-                        .HasColumnType("char(36)")
+                        .HasColumnType("uuid")
                         .HasColumnName("class_id");
 
                     b.Property<DateTime?>("Date")
@@ -75,7 +75,7 @@ namespace Book_EF.Migrations
                         .HasColumnName("publish_year");
 
                     b.Property<Guid?>("PublisherId")
-                        .HasColumnType("char(36)")
+                        .HasColumnType("uuid")
                         .HasColumnName("publisher_id");
 
                     b.Property<string>("Title")
@@ -91,7 +91,7 @@ namespace Book_EF.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<string>("ClassName")
@@ -106,7 +106,7 @@ namespace Book_EF.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<string>("PublisherName")

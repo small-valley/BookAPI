@@ -6,7 +6,7 @@ namespace Book_EF.EntityModels
   public partial class Publisher
   {
     [Key]
-    [Column("id", TypeName = "char(36)")]
+    [Column("id", TypeName = "uuid")]
     public Guid Id { get; set; }
     public string? PublisherName { get; set; }
   }
